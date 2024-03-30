@@ -39,13 +39,30 @@
     </div>
     <script>
       let wheel = document.querySelector(".wheel");
-      let spinBtn = document.querySelector(".spinBtn");
-      let value = Math.ceil(Math.random() * 3600);
+let spinBtn = document.querySelector(".spinBtn");
 
-      spinBtn.onclick = function () {
-        wheel.style.transform = "rotate(" + value + "deg)";
-        value += Math.ceil(Math.random() * 3600);
-      };
+spinBtn.onclick = function () {
+  // Calculate the rotation speed to cover 50 degrees in 30 seconds
+  let targetAngle = 6000; // Target rotation angle
+  let duration = 30; // Duration in seconds
+  let rotationSpeed = targetAngle / duration; // Rotation speed in degrees per second
+
+  // Calculate the final rotation angle
+  let finalAngle = parseInt(wheel.style.transform.replace("rotate(", "").replace("deg)", "")) || 0;
+  finalAngle += 360 * Math.floor(Math.random() * 10) + 360 + Math.floor(Math.random() * 360);
+  finalAngle += targetAngle;
+
+  // Apply the rotation animation
+  wheel.style.transition = "transform " + duration + "s cubic-bezier(0.1, 0.6, 0.1, 1)";
+  wheel.style.transform = "rotate(" + finalAngle + "deg)";
+
+  // Reset transition and rotation after animation ends
+  setTimeout(() => {
+    wheel.style.transition = "";
+    wheel.style.transform = "rotate(" + (finalAngle % 360) + "deg)";
+  }, duration * 1000);
+};
+
     </script>
   </body>
 </html>
